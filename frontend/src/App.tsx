@@ -6,6 +6,9 @@ import WeatherDisplay from "./components/WeatherDisplay";
 import type { WeatherData } from "./components/WeatherDisplay";
 import "./App.css";
 
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+
 function App() {
   const [count, setCount] = useState(0);
   const [city, setCity] = useState("london");
@@ -30,7 +33,6 @@ function App() {
     setCity(newCity);
   };
 
-  // Fetch weather from deployed MCP backend
   const {
     data: weather,
     isLoading,
@@ -40,7 +42,7 @@ function App() {
     queryKey: ["weather", city],
     queryFn: async () => {
       const response = await axios.get<WeatherData>(
-        `https://weathermcp-ggmn.onrender.com/weather/${encodeURIComponent(city)}`,
+        `${API_BASE_URL}/weather/${encodeURIComponent(city)}`,
       );
       return response.data;
     },
@@ -92,7 +94,7 @@ function App() {
             Weather MCP
           </h1>
           <p className="mt-2 opacity-90 text-sm relative z-10">
-            Real-time weather via deployed MCP backend
+            Real-time weather from your local backend
           </p>
         </div>
 

@@ -63,12 +63,7 @@ async def get_weather(city: str):
         }
 
 async def get_forecast(city: str, days: int = 3):
-    print("DEBUG city:", city)
-    print("DEBUG days:", days)
-
     location = await get_coordinates(city)
-
-    print("DEBUG location:", location)
 
     async with httpx.AsyncClient() as client:
         response = await client.get(
@@ -81,16 +76,9 @@ async def get_forecast(city: str, days: int = 3):
             }
         )
 
-        print("DEBUG status:", response.status_code)
-        print("DEBUG response:", response.text)
-
         response.raise_for_status()
 
         forecast = response.json()
-        if response.status_code != 200:
-            print("STATUS:", response.status_code)
-            print("ERROR:", response.text)
-        print("DEBUG forecast:", forecast)
 
         return {
             "location": location,

@@ -1,7 +1,4 @@
-"""
-Clean FastAPI backend for Render.com deployment.
-This file is independent of MCP dependencies.
-"""
+"""FastAPI backend used by the local React application."""
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -17,15 +14,12 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# CORS configuration for both local development and production
+# Allow the Vite development server to call the API.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:3000",
         "http://localhost:5173",
-        "https://weathermcp-ggmn.onrender.com",
-        "https://*.onrender.com",
-        "*"  # Remove in strict production
+        "http://127.0.0.1:5173",
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -88,4 +82,4 @@ async def get_forecast(city: str, days: int = 3):
 if __name__ == "__main__":
     import uvicorn
     port = int(os.getenv("PORT", 8000))
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    uvicorn.run(app, host="127.0.0.1", port=port)

@@ -1,78 +1,35 @@
-# Weather MCP Fullstack
+# Weather App Frontend
 
-A modern React + TypeScript frontend for the Weather MCP backend. Displays real-time weather data using React Query, Tailwind CSS, and a deployed MCP-compatible API.
+This folder contains the React and TypeScript interface for the weather
+project. Follow the complete beginner tutorial in the [root README](../README.md).
 
-## Backend
+The frontend expects the FastAPI backend at `http://localhost:8000` by default.
+Start the backend before starting the frontend.
 
-The backend is deployed at:
+## Start the Frontend
 
-**https://weathermcp-ggmn.onrender.com/weather/{city}**
-
-Example: [https://weathermcp-ggmn.onrender.com/weather/london](https://weathermcp-ggmn.onrender.com/weather/london)
-
-The frontend is now configured to fetch from this production endpoint (London by default).
-
-## Features
-
-- Real-time weather display with detailed metrics (temp, humidity, wind, UV, etc.)
-- React Query for caching, loading & error states
-- Responsive Tailwind UI with dark mode support
-- TypeScript for type safety
-- Refresh button with click counter
-- Graceful fallback to demo data on errors
-
-## Setup & Development
-
-1. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-2. Run development server:
-   ```bash
-   npm run dev
-   ```
-
-3. Open http://localhost:5173
-
-The app will automatically fetch live weather from the deployed backend.
-
-## Build for Production
-
-```bash
-npm run build
+```powershell
+npm install
+npm run dev
 ```
 
-The built app is in the `dist/` folder and can be deployed to any static host (Netlify, Vercel, GitHub Pages, etc.).
+Open <http://localhost:5173>.
 
-## Project Structure
+## Change the Backend URL
 
-- `src/App.tsx` - Main app with data fetching logic
-- `src/components/WeatherDisplay.tsx` - Reusable weather UI component + types
-- `src/index.css` - Tailwind + custom styles
-- Uses Vite for fast builds and HMR
+Copy `.env.example` to `.env`, then edit `VITE_API_BASE_URL`:
 
-## MCP Notes
-
-This frontend pairs with the sibling `weather-mcp` backend following Model Context Protocol specs. The deployed version provides weather tools like `getCurrentWeather`.
-
-Follow React + TypeScript best practices as per `.github/copilot-instructions.md`.
-
-## License
-
-MIT
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```powershell
+Copy-Item .env.example .env
 ```
+
+Restart the Vite development server after changing an environment variable.
+
+## Available Commands
+
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Start the development server |
+| `npm run build` | Type-check and build the application |
+| `npm run lint` | Run ESLint |
+| `npm run preview` | Preview the production build locally |

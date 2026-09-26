@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import AsyncMock, patch
+from unittest.mock import AsyncMock, Mock, patch
 
 from weather import get_forecast, get_forcast
 
@@ -13,8 +13,8 @@ class GetForecastTests(unittest.TestCase):
                 "longitude": 2.3522,
                 "country": "France",
             })), patch("httpx.AsyncClient") as mock_client:
-                mock_get = AsyncMock()
-                mock_response = mock_get.return_value
+                mock_response = Mock()
+                mock_get = AsyncMock(return_value=mock_response)
                 mock_response.raise_for_status.return_value = None
                 mock_response.json.return_value = {
                     "daily": {
@@ -43,8 +43,8 @@ class GetForecastTests(unittest.TestCase):
                 "longitude": 12.4964,
                 "country": "Italy",
             })), patch("httpx.AsyncClient") as mock_client:
-                mock_get = AsyncMock()
-                mock_response = mock_get.return_value
+                mock_response = Mock()
+                mock_get = AsyncMock(return_value=mock_response)
                 mock_response.raise_for_status.return_value = None
                 mock_response.json.return_value = {
                     "daily": {
