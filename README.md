@@ -7,6 +7,18 @@ search for a city, and display live weather data from
 
 No weather API key is required.
 
+## Architecture
+
+This project exposes a shared `WeatherService` through two interfaces:
+
+1. **REST API**
+    FastAPI endpoints consumed by the React frontend.
+2. **MCP server**
+    MCP tools consumed by AI assistants.
+
+Both interfaces delegate weather operations to the same `WeatherService`,
+keeping the business logic independent of the transport layer.
+
 ## What You Will Learn
 
 - How a frontend sends an HTTP request to a backend
@@ -225,11 +237,72 @@ Good beginner exercises include adding a temperature unit switch, displaying a
 multi-day forecast, replacing the demo fallback with a dedicated error panel,
 and writing a component test for the weather display.
 
-## MCP Status
+## Use the MCP Server
 
-`backend/server.py` is an experimental Model Context Protocol server. It is not
-needed for this tutorial, and its additional dependencies and client setup are
-not included in the beginner workflow.
+The MCP server uses the standard input/output (`stdio`) transport. An MCP client
+starts `backend/server.py` as a child process, discovers its tools, and calls
+them as needed. Do not start the server separately when using an MCP client.
+
+### Install the MCP Dependencies
+
+From the project root, create the backend virtual environment and install the
+dependencies if you have not already done so:
+
+```powershell
+python -m venv backend/.venv
+./backend/.venv/Scripts/python.exe -m pip install -r backend/requirements.txt
+```
+
+### Test with the Included Client
+
+The included Python client starts the server, calls `get_current_weather`, and
+prints the result:
+
+```powershell
+./backend/.venv/Scripts/python.exe ./backend/mcp_client.py London
+```
+
+### Configure VS Code as an MCP Client
+
+The included `.vscode/mcp.json` configures the server for Windows:
+
+```json
+{
+    "servers": {
+        "weatherMcp": {
+            "type": "stdio",
+            "command": "${workspaceFolder}/backend/.venv/Scripts/python.exe",
+            "args": ["${workspaceFolder}/backend/server.py"],
+            "cwd": "${workspaceFolder}/backend"
+        }
+    }
+}
+```
+
+On macOS or Linux, change `command` to
+`${workspaceFolder}/backend/.venv/bin/python`.
+
+Reload VS Code after saving the configuration. The MCP client launches the
+server automatically when a weather tool is used. You can then ask an AI
+assistant questions such as:
+
+- `What is the current weather in London?`
+- `Give me the weather in Paris for the next two days.`
+- `Get detailed weather for Tokyo and include the forecast.`
+
+The server exposes these tools:
+
+| Tool | Purpose |
+| --- | --- |
+| `get_current_weather` | Get current weather for a city |
+| `get_weather_by_date_range` | Get weather between two dates |
+| `get_weather_details` | Get detailed JSON data with an optional forecast |
+
+To verify the MCP handshake and tool discovery, run:
+
+```powershell
+./backend/.venv/Scripts/python.exe -m unittest backend/test_mcp_stdio.py
+```
 
 ## Data Attribution
 
