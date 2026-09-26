@@ -1,0 +1,9 @@
+# Python
+backend/.venv/
+**/__pycache__/
+*.py[cod]
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
